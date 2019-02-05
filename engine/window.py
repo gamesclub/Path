@@ -3,7 +3,7 @@ import time
 
 
 class Window:
-    __window, __loop = None, None
+    __window, __loop, __setup_renderer = None, None, None
 
     width, height = 640, 480
 
@@ -19,9 +19,9 @@ class Window:
 
     def callBacks(self, callbacks):
         GLFW.glfwSetErrorCallback(callbacks.errorCallback)
-        GLFW.glfwSetKeyCallback(self.__window, callbacks.keyCallBack)
         GLFW.glfwSetWindowSizeCallback(self.__window, callbacks.sizeCallback)
         self.__loop = callbacks.loopCallback
+        self.__setup_renderer = callbacks.setupRenderer
 
     def hints(self):
         GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, True)
@@ -32,6 +32,7 @@ class Window:
 
     def showWindow(self):
         GLFW.glfwMakeContextCurrent(self.__window)
+        self.__setup_renderer()
 
         while not GLFW.glfwWindowShouldClose(self.__window):
             self.__loop(self.__window)
