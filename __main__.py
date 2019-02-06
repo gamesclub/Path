@@ -6,9 +6,7 @@ def main():
     global window
 
     window = Window()
-    engine.initialize(window)
-    window.callBacks(engine)
-    window.hints()
+    window.setup(engine)
     window.showWindow()
 
 

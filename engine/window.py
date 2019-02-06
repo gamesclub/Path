@@ -3,7 +3,7 @@ import time
 
 
 class Window:
-    __window, __loop, __setup_renderer = None, None, None
+    __window, __loop, __initialize = None, None, None
 
     width, height = 640, 480
 
@@ -17,13 +17,14 @@ class Window:
             GLFW.glfwTerminate()
             raise RuntimeError("Could create a window.")
 
-    def callBacks(self, callbacks):
-        GLFW.glfwSetErrorCallback(callbacks.errorCallback)
-        GLFW.glfwSetWindowSizeCallback(self.__window, callbacks.sizeCallback)
-        self.__loop = callbacks.loopCallback
-        self.__setup_renderer = callbacks.setupRenderer
+    def setup(self, engine):
+        GLFW.glfwSetErrorCallback(engine.errorCallback)
+        GLFW.glfwSetWindowSizeCallback(self.__window, self.sizeCallback)
+        self.windowHint()
+        self.__loop = engine.loopCallback
+        self.__initialize = engine.initialize
 
-    def hints(self):
+    def windowHint(self):
         GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, True)
         GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE)
 
@@ -32,13 +33,17 @@ class Window:
 
     def showWindow(self):
         GLFW.glfwMakeContextCurrent(self.__window)
-        self.__setup_renderer()
+        self.__initialize(self)
 
         while not GLFW.glfwWindowShouldClose(self.__window):
-            self.__loop(self.__window)
+            self.__loop(self)
             self.sync(GLFW.glfwGetTime())
 
         GLFW.glfwTerminate()
+
+    def sizeCallback(self, unused_window, width, height):
+        self.width = width
+        self.height = height
 
     def sync(self, start):
         slot = 1 / 30.0
@@ -46,3 +51,6 @@ class Window:
 
         while GLFW.glfwGetTime() < end:
             time.sleep(1 / 1000.0)
+
+    def getWindow(self):
+        return self.__window
