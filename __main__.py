@@ -3,8 +3,6 @@ from engine import engine
 
 
 def main():
-    global window
-
     window = Window()
     window.setup(engine)
     window.showWindow()
