@@ -1,6 +1,5 @@
 import OpenGL.GL as GL
 import numpy as NUMPY
-import OpenGL.arrays.VBO as VBO
 
 
 class Buffer:
@@ -37,11 +36,10 @@ class VertexBuffer:
 class VertexArray:
     def __init__(self):
         self.__arrayObj = GL.glGenVertexArrays(1)
-        self.vbo = None
+        self.vbo = VertexBuffer()
 
     def buildVAO(self, attr):
         GL.glBindVertexArray(self.__arrayObj)
-        self.vbo = VBO.VBO()
         self.vbo.buildVBO(attr)
         GL.glBindVertexArray(0)
 
