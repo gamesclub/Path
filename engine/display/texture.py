@@ -19,13 +19,23 @@ class Texture:
         GL.glBindTexture(GL.GL_TEXTURE_2D, 0)
 
     def attachTexture(self, img):
-        img = Image.open("./TEST.png").transpose(Image.FLIP_TOP_BOTTOM)
+        img = Image.open(img).transpose(Image.FLIP_TOP_BOTTOM)
         image = NUMPY.array(list(img.getdata()), NUMPY.uint8)
 
         GL.glBindTexture(GL.GL_TEXTURE_2D, self.__texture)
 
-        GL.glTexImage2D(GL.GL_TEXTURE_2D, 0, GL.GL_RGB, img.size[0], img.size[1], 0, GL.GL_RGB, GL.GL_UNSIGNED_BYTE,
-                       image)
+        GL.glTexImage2D(
+            GL.GL_TEXTURE_2D,
+            0,
+            GL.GL_RGB,
+            img.size[0],
+            img.size[1],
+            0,
+            GL.GL_RGB,
+            GL.GL_UNSIGNED_BYTE,
+            image
+        )
+
         GL.glGenerateMipmap(GL.GL_TEXTURE_2D)
 
         GL.glBindTexture(GL.GL_TEXTURE_2D, 0)

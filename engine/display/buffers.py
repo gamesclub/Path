@@ -1,8 +1,6 @@
 import OpenGL.GL as GL
 import numpy as NUMPY
 
-from engine.display.texture import Texture
-
 
 class Buffer:
     def __init__(self, buffer_type):
@@ -51,7 +49,6 @@ class VertexArray:
         return self.__arrayObj
 
     def useVAO(self, program):
-        program.useProgram()
         GL.glBindVertexArray(self.__arrayObj)
 
         if self.__tex_coord:
@@ -69,6 +66,7 @@ class VertexArray:
 
     def texCoord(self, tex_coord):
         self.__tex_coord = tex_coord
+        return self
 
 
 glFloatSize = GL.ctypes.sizeof(GL.ctypes.c_float)

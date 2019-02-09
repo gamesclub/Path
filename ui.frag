@@ -2,12 +2,13 @@
 
 out vec4 FragColor;
 
-in vec3 uiColor;
-in vec2 TexCoord;
+//in vec3 uiColor;
+in vec2 texCoord;
 
 uniform sampler2D uiTexture;
+uniform sampler2D uiTextureFace;
 
 void main()
 {
-    FragColor = texture(uiTexture, TexCoord) * vec4(uiColor, 1.0);
+    FragColor = mix(texture(uiTexture, texCoord), texture(uiTextureFace, texCoord), 0.2);// * vec4(uiColor, 1.0);
 }

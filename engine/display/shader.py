@@ -1,4 +1,5 @@
 import OpenGL.GL as GL
+import glm as GLM
 
 
 class Shader:
@@ -67,3 +68,14 @@ class ShaderProgram:
 
     def setFloat(self, name, value):
         GL.glUniform1f(GL.glGetUniformLocation(self.getProgramObj(), name), float(value))
+
+    def setMat4(self, name, value):
+        GL.glUniformMatrix4fv(
+            GL.glGetUniformLocation(
+                self.getProgramObj(),
+                name
+            ),
+            1,
+            GL.GL_FALSE,
+            GLM.value_ptr(value)
+        )
