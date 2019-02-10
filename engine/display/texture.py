@@ -27,11 +27,11 @@ class Texture:
         GL.glTexImage2D(
             GL.GL_TEXTURE_2D,
             0,
-            GL.GL_RGB,
+            GL.GL_RGBA,
             img.size[0],
             img.size[1],
             0,
-            GL.GL_RGB,
+            GL.GL_RGBA,
             GL.GL_UNSIGNED_BYTE,
             image
         )

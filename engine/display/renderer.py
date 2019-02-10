@@ -2,6 +2,7 @@ import glfw.GLFW as GLFW
 import OpenGL.GL as GL
 import numpy as NUMPY
 import glm as GLM
+import math as MATH
 
 from engine.display.shader import ShaderProgram
 from engine.display.buffers import VertexArray, Vertices
@@ -129,6 +130,7 @@ def setupRenderer():
 
     GL.glEnableClientState(GL.GL_VERTEX_ARRAY)
     GL.glEnable(GL.GL_DEPTH_TEST)
+    GL.glEnable(GL.GL_MULTISAMPLE)
 
 
 def render(window):
@@ -137,6 +139,18 @@ def render(window):
     GLFW.glfwPollEvents()
 
     GL.glViewport(0, 0, window.width, window.height)
+
+    cameraPos = GLM.vec3(0.0, 0.0, 3.0)
+    cameraTarget = GLM.vec3(0.0, 0.0, 0.0)
+    cameraDirection = GLM.normalize(cameraPos - cameraTarget)
+    up = GLM.vec3(0.0, 1.0, 0.0)
+    cameraRight = GLM.normalize(GLM.cross(up, cameraDirection))
+    cameraUp = GLM.cross(cameraDirection, cameraRight)
+
+    view = GLM.lookAt(GLM.vec3(0.0, 0.0, 3.0),
+    GLM.vec3(0.0, 0.0, 0.0),
+    GLM.vec3(0.0, 1.0, 0.0))
+
     GL.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT)
     program.useProgram()
 
@@ -145,14 +159,19 @@ def render(window):
 
     projection = GLM.perspective(GLM.radians(45.0), window.width / window.height, 0.1, 100.0)
 
-    program.setMat4("view", view)
     program.setMat4("projection", projection)
 
     for w in range(10):
+        radius = 10.0
+        camX = MATH.sin(GLFW.glfwGetTime()) * radius
+        camZ = MATH.cos(GLFW.glfwGetTime()) * radius
+        view = GLM.lookAt(GLM.vec3(camX, 0.0, camZ), GLM.vec3(0.0, 0.0, 0.0), GLM.vec3(0.0, 1.0, 0.0))
+
         model = GLM.mat4(1.0)
         model = GLM.translate(model, cube_positions[w])
         model = GLM.rotate(model, GLM.radians(20.0 * w), GLM.vec3(1.0, 0.3, 0.5))
         program.setMat4("model", model)
+        program.setMat4("view", view)
         vao.useVAO(program)
         GL.glDrawArrays(GL.GL_TRIANGLES, 0, 36)
 

@@ -10,6 +10,7 @@ class Window:
         if not GLFW.glfwInit():
             raise EnvironmentError("Could not initialize the library.")
 
+        GLFW.glfwWindowHint(GLFW.GLFW_SAMPLES, 8)
         self.__window = GLFW.glfwCreateWindow(self.width, self.height, "Path", None, None)
 
         if not self.__window:
